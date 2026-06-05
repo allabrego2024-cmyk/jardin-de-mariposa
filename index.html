@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubre las Conexiones Mágicas entre Español, Italiano e Inglés</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #2b32b2, #141e30);
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #butterfly-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #presentation {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            position: absolute;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 85%;
+            max-width: 1000px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .slide.fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .slide h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(to right, #ffd700, #00f2ff, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide h2 {
+            font-size: 2.3rem;
+            margin-bottom: 20px;
+            color: #00f2ff;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+        }
+
+        .slide p, .slide ul {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: #e0e0e0;
+            max-width: 800px;
+        }
+
+        .slide ul {
+            text-align: left;
+            list-style-type: none;
+        }
+
+        .slide ul li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .slide ul li::before {
+            content: "💫";
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .slide-image {
+            width: 100%;
+            max-width: 500px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 8px 25px rgba(0, 242, 255, 0.3);
+            border: 2px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .image-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .image-row .slide-image {
+            max-width: 280px;
+            height: 160px;
+        }
+
+        .flags-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 4rem;
+        }
+
+        .flag-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flag-item span.flag-emoji {
+            font-size: 4rem;
+            filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.5));
+        }
+
+        .flag-item span.flag-label {
+            font-size: 1rem;
+            color: #00f2ff;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+        }
+
+        .comparison-table {
+            width: 100%;
+            max-width: 700px;
+            margin: 15px 0;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 242, 255, 0.2);
+        }
+
+        .comparison-table th {
+            background: rgba(0, 242, 255, 0.2);
+            color: #00f2ff;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .comparison-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1.05rem;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .highlight-box {
+            background: rgba(0, 242, 255, 0.1);
+            border-left: 4px solid #00f2ff;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            max-width: 700px;
+            text-align: left;
+        }
+
+        .highlight-box strong {
+            color: #00f2ff;
+        }
+
+        .personal-story {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid #ffd700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .fun-fact {
+            background: rgba(78, 205, 196, 0.15);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(0, 242, 255, 0.5);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn:hover {
+            background: rgba(0, 242, 255, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00f2ff;
+            min-width: 60px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.8);
+        }
+
+        .keyboard-hint {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            z-index: 20;
+        }
+
+        .morpho-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+            z-index: 25;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            filter: brightness(0) saturate(0);
+        }
+
+        .morpho-wrapper.appearing {
+            animation: morphoAppearFromDark 0.5s ease-out forwards;
+        }
+
+        .morpho-wrapper.visible-brief {
+            opacity: 1;
+            filter: brightness(1) saturate(1);
+            transform: translate(-50%, -50%) scale(1);
+            transition: opacity 0.15s ease-in-out, filter 0.15s ease-in-out, transform 0.15s ease-in-out;
+        }
+
+        .morpho-wrapper.fading-dark {
+            opacity: 0;
+            filter: brightness(0) saturate(0);
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        @keyframes morphoAppearFromDark {
+            0% {
+                opacity: 0;
+                filter: brightness(0) saturate(0);
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 0.7;
+                filter: brightness(0.5) saturate(0.5);
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                filter: brightness(1) saturate(1);
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .morpho {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: morphoFloat 3s ease-in-out infinite;
+        }
+
+        .morpho .wing-wrapper {
+            position: absolute;
+            top: 60px;
+            width: 150px;
+            height: 225px;
+            transform-style: preserve-3d;
+        }
+
+        .morpho .wing-left {
+            right: 50%;
+            margin-right: 13px;
+            transform-origin: right center;
+            animation: morphoFlapLeft 0.3s ease-in-out infinite alternate;
+        }
+
+        .morpho .wing-right {
+            left: 50%;
+            margin-left: 13px;
+            transform-origin: left center;
+            animation: morphoFlapRight 0.3s ease-in-out infinite alternate;
+        }
+
+        .morpho .wing-mirror {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .morpho .wing-left .wing-mirror {
+            transform: scaleX(-1);
+        }
+
+        .morpho .wing-top {
+            position: absolute;
+            top: -60px;
+            width: 150px;
+            height: 150px;
+            background: 
+                radial-gradient(circle at 85% 15%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 88% 22%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 90% 30%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 92% 38%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 91% 45%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 90% 52%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 88% 60%, #fff 3px, transparent 4px),
+                radial-gradient(circle at 70% 45%, #fff 2px, #000 4px, #00f2ff 6px, #0099ff 9px, #0072ff 13px, #003399 18px, transparent 25px),
+                radial-gradient(circle at 60% 65%, #fff 1px, #000 3px, #00f2ff 5px, #0072ff 8px, transparent 12px),
+                linear-gradient(45deg, transparent 47%, rgba(0, 0, 0, 0.5) 48%, rgba(0, 0, 0, 0.5) 52%, transparent 53%),
+                linear-gradient(-30deg, transparent 47%, rgba(0, 0, 0, 0.45) 48%, rgba(0, 0, 0, 0.45) 52%, transparent 53%),
+                linear-gradient(80deg, transparent 47%, rgba(0, 0, 0, 0.4) 48%, rgba(0, 0, 0, 0.4) 52%, transparent 53%),
+                radial-gradient(circle at 60% 40%, #00f2ff 0%, #00ccff 15%, #0099ff 30%, #0072ff 45%, #0055cc 60%, #003399 75%, #001a66 90%, #000 100%);
+            border-radius: 80% 20% 60% 20%;
+            border: 6px solid #000;
+            box-shadow: 
+                0 0 30px rgba(0, 242, 255, 0.8),
+                inset 0 0 45px rgba(0, 242, 255, 0.4);
+            overflow: hidden;
+        }
+
+        .morpho .wing-top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 25%, 
+                rgba(0, 242, 255, 0.3) 40%,
+                transparent 55%,
+                rgba(0, 242, 255, 0.5) 75%,
+                transparent 100%);
+            border-radius: inherit;
+            animation: morphoShimmer 3s ease-in-out infinite;
+        }
+
+        .morpho .wing-bottom {
+            position: absolute;
+            top: 60px;
+            width: 120px;
+            height: 135px;
+            background: 
+                radial-gradient(circle at 25% 25%, #00f2ff 5px, transparent 7px),
+                radial-gradient(circle at 45% 30%, #00f2ff 4px, transparent 6px),
+                radial-gradient(circle at 65% 35%, #00f2ff 4px, transparent 6px),
+                radial-gradient(circle at 50% 75%, #00f2ff 4px, transparent 6px),
+                radial-gradient(circle at 70% 70%, #fff 1px, #000 3px, #00f2ff 5px, #0072ff 8px, transparent 12px),
+                linear-gradient(60deg, transparent 47%, rgba(0, 0, 0, 0.45) 48%, rgba(0, 0, 0, 0.45) 52%, transparent 53%),
+                linear-gradient(-45deg, transparent 47%, rgba(0, 0, 0, 0.4) 48%, rgba(0, 0, 0, 0.4) 52%, transparent 53%),
+                radial-gradient(circle at 50% 50%, #00f2ff 0%, #00ccff 20%, #0099ff 35%, #0072ff 50%, #0055cc 65%, #003399 80%, #1a0b2e 100%);
+            border-radius: 20% 80% 50% 60%;
+            border: 6px solid #000;
+            box-shadow: 
+                0 0 22px rgba(0, 198, 255, 0.7),
+                inset 0 0 30px rgba(0, 198, 255, 0.3);
+            overflow: hidden;
+        }
+
+        .morpho .body-part {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, #1a1a1a, #0a0a0a);
+            border-radius: 30px;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
+        }
+
+        .morpho .thorax {
+            top: 45px;
+            width: 27px;
+            height: 90px;
+            z-index: 10;
+        }
+
+        .morpho .abdomen {
+            top: 120px;
+            width: 21px;
+            height: 105px;
+            z-index: 9;
+        }
+
+        .morpho .antenna {
+            position: absolute;
+            top: 30px;
+            width: 75px;
+            height: 75px;
+            border: 4.5px solid #0a0a0a;
+            border-radius: 50%;
+            z-index: 8;
+        }
+
+        .morpho .antenna.left {
+            left: 50%;
+            transform: translateX(-100%) rotate(-30deg);
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+        }
+
+        .morpho .antenna.right {
+            right: 50%;
+            transform: translateX(100%) rotate(30deg) scaleX(-1);
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+        }
+
+        @keyframes morphoFlapLeft {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(70deg); }
+        }
+
+        @keyframes morphoFlapRight {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(-70deg); }
+        }
+
+        @keyframes morphoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-22px); }
+        }
+
+        @keyframes morphoShimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .bg-particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00f2ff, 0 0 15px #00f2ff;
+            opacity: 0;
+            animation: bgTwinkle 4s infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @keyframes bgTwinkle {
+            0%, 100% { opacity: 0; transform: translateY(0); }
+            50% { opacity: 0.8; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="butterfly-canvas"></canvas>
+
+    <div id="presentation">
+        <!-- SLIDE 1: Bienvenida -->
+        <div class="slide active">
+            <h1>🌍 Un Viaje Entre Tres Mundos</h1>
+            <div class="flags-container">
+                <div class="flag-item">
+                    <span class="flag-emoji">🇪🇸</span>
+                    <span class="flag-label">Español</span>
+                </div>
+                <div class="flag-item">
+                    <span class="flag-emoji">🇮🇹</span>
+                    <span class="flag-label">Italiano</span>
+                </div>
+                <div class="flag-item">
+                    <span class="flag-emoji">🇬🇧</span>
+                    <span class="flag-label">Inglés</span>
+                </div>
+            </div>
+            <p style="font-size: 1.3rem; margin: 20px 0;">¿Alguna vez has notado que estos idiomas se parecen más de lo que crees? Acompáñame a descubrir las conexiones sorprendentes que los unen.</p>
+            <p style="margin-top: 20px; font-size: 1rem; opacity: 0.8;">Usa ← → o los botones para comenzar el viaje</p>
+        </div>
+
+        <!-- SLIDE 2: Mi experiencia personal -->
+        <div class="slide">
+            <h2>💭 Mi Historia con los Idiomas</h2>
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=300&fit=crop" alt="Persona aprendiendo idiomas" class="slide-image">
+            <div class="personal-story">
+                "Recuerdo cuando viajé a Italia por primera vez. Sin saber italiano, me di cuenta de que podía entender mucho solo con mi español... ¡y algo de inglés que aprendí en la escuela! Fue mágico descubrir que estos idiomas hablan entre sí."
+            </div>
+            <p>Esta presentación nace de esa experiencia: descubrir que aprender un idioma puede abrirte las puertas a otros dos.</p>
+        </div>
+
+        <!-- SLIDE 3: La familia lingüística -->
+        <div class="slide">
+            <h2>👨‍👩‍‍👦 Una Gran Familia</h2>
+            <div class="image-row">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=200&fit=crop" alt="Conexiones globales" class="slide-image">
+                <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?w=400&h=200&fit=crop" alt="Europa" class="slide-image">
+            </div>
+            <p>Imagina que los idiomas son como primos en una gran familia:</p>
+            <ul>
+                <li><strong>Español e Italiano:</strong> Son como hermanos gemelos, ambos hijos del latín. ¡Se entienden casi sin esfuerzo!</li>
+                <li><strong>Inglés:</strong> Es ese primo que creció en otro país pero que mantiene fuertes lazos familiares. Aunque habla diferente, comparte muchas raíces.</li>
+            </ul>
+            <div class="fun-fact">
+                💡 <strong>¿Sabías que?</strong> Si hablas español, ya sabes miles de palabras en italiano e inglés sin haberlas estudiado.
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Palabras que nos unen -->
+        <div class="slide">
+            <h2>🔗 Palabras Hermanas (Cognados)</h2>
+            <p style="margin-bottom: 15px;">Estas palabras son como viejos amigos que encuentras en diferentes países:</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Español</th>
+                        <th>Italiano</th>
+                        <th>Inglés</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🌹 Amor</td>
+                        <td>Amore</td>
+                        <td>Amorous</td>
+                    </tr>
+                    <tr>
+                        <td>🌙 Noche</td>
+                        <td>Notte</td>
+                        <td>Night</td>
+                    </tr>
+                    <tr>
+                        <td>📚 Libro</td>
+                        <td>Libro</td>
+                        <td>Library</td>
+                    </tr>
+                    <tr>
+                        <td>💧 Agua</td>
+                        <td>Acqua</td>
+                        <td>Aquatic</td>
+                    </tr>
+                    <tr>
+                        <td>👨‍‍👧👦 Familia</td>
+                        <td>Famiglia</td>
+                        <td>Family</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 15px; font-style: italic;">¿Ves el patrón? ¡Es como un código secreto que conecta los tres idiomas!</p>
+        </div>
+
+        <!-- SLIDE 5: Situaciones cotidianas -->
+        <div class="slide">
+            <h2>☕ En la Vida Real</h2>
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=250&fit=crop" alt="Restaurante internacional" class="slide-image">
+            <p>Imagina estas situaciones que vivimos todos:</p>
+            <div class="highlight-box" style="margin: 15px 0;">
+                <strong>🍕 En un restaurante:</strong><br>
+                "Quiero una pizza con <strong>tomate</strong> y <strong>mozzarella</strong>"<br>
+                <span style="font-size: 0.95rem; opacity: 0.9;">(En los tres idiomas es prácticamente igual)</span>
+            </div>
+            <div class="highlight-box" style="margin: 15px 0;">
+                <strong>🎵 Escuchando música:</strong><br>
+                "Esta <strong>melodía</strong> es <strong>romántica</strong>"<br>
+                <span style="font-size: 0.95rem; opacity: 0.9;">(Melodia romantica / Romantic melody)</span>
+            </div>
+            <p>¡Son palabras que usamos todos los días y que viajan entre idiomas sin pasaporte!</p>
+        </div>
+
+        <!-- SLIDE 6: Errores divertidos -->
+        <div class="slide">
+            <h2>😅 Los "Falsos Amigos"</h2>
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=220&fit=crop" alt="Confusión divertida" class="slide-image">
+            <p style="margin-bottom: 15px;">Pero cuidado, no todo es color de rosa. A veces las palabras nos juegan malas pasadas:</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Palabra</th>
+                        <th>Lo que crees</th>
+                        <th>Lo que realmente es</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Burro"</td>
+                        <td>🫏 El animal (ES)</td>
+                        <td>🧈 Mantequilla (IT)</td>
+                    </tr>
+                    <tr>
+                        <td>"Embarazada"</td>
+                        <td>🤰 En estado (ES)</td>
+                        <td>😳 Avergonzada (EN: Embarrassed)</td>
+                    </tr>
+                    <tr>
+                        <td>"Ropa"</td>
+                        <td>👕 Vestimenta (ES)</td>
+                        <td>🪢 Cuerda (EN: Rope)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 15px; font-style: italic;">¡Imagina pedir "burro" en Italia pensando en el animal y te dan mantequilla! 🤣</p>
+        </div>
+
+        <!-- SLIDE 7: Viajando por el mundo -->
+        <div class="slide">
+            <h2>✈️ Mis Aventuras Lingüísticas</h2>
+            <div class="image-row">
+                <img src="https://images.unsplash.com/photo-1499856871940-a09627c6dcf6?w=280&h=160&fit=crop" alt="París" class="slide-image">
+                <img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=280&h=160&fit=crop" alt="Venecia" class="slide-image">
+                <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=280&h=160&fit=crop" alt="Londres" class="slide-image">
+            </div>
+            <div class="personal-story">
+                "En Londres, pedí 'agua' y entendieron perfecto. En Roma, hablé 'spanglish' con un italiano y nos entendimos maravillosamente. Es increíble cómo estos idiomas se ayudan entre sí."
+            </div>
+            <ul>
+                <li>🎭 <strong>Arte y cultura:</strong> Palabras como 'museo', 'teatro', 'ópera' son universales</li>
+                <li>🍝 <strong>Comida:</strong> 'Pasta', 'pizza', 'espresso' - ¡el italiano conquistó al mundo!</li>
+                <li>💻 <strong>Tecnología:</strong> 'Internet', 'email', 'software' - el inglés nos conecta</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 8: Consejos prácticos -->
+        <div class="slide">
+            <h2>🎯 Mis Consejos Personales</h2>
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=250&fit=crop" alt="Estudiantes colaborando" class="slide-image">
+            <p style="margin-bottom: 15px;">Después de aprender estos tres idiomas, esto es lo que me funcionó:</p>
+            <div class="highlight-box">
+                <strong>1️⃣ Aprovecha lo que ya sabes:</strong><br>
+                Si hablas español, ya tienes el 60% del camino recorrido para entender italiano e inglés.
+            </div>
+            <div class="highlight-box">
+                <strong>2️⃣ No tengas miedo de equivocarte:</strong><br>
+                Los errores son parte del aprendizaje. ¡Yo he pasado por mil vergüenzas y aquí sigo!
+            </div>
+            <div class="highlight-box">
+                <strong>3️⃣ Consume contenido que te guste:</strong><br>
+                Películas, música, series... Aprende divirtiéndote, no sufriendo.
+            </div>
+        </div>
+
+        <!-- SLIDE 9: La magia del aprendizaje -->
+        <div class="slide">
+            <h2>✨ Lo Mejor de Todo</h2>
+            <div class="image-row">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=350&h=200&fit=crop" alt="Amistades internacionales" class="slide-image">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=350&h=200&fit=crop" alt="Viajeros felices" class="slide-image">
+            </div>
+            <p>Aprender estos tres idiomas no es solo estudiar gramática y vocabulario. Es:</p>
+            <ul>
+                <li>🤝 <strong>Conectar con personas</strong> de diferentes culturas</li>
+                <li>🌎 <strong>Ver el mundo</strong> desde diferentes perspectivas</li>
+                <li>🎁 <strong>Recibir regalos</strong> literarios, musicales y cinematográficos</li>
+                <li>💪 <strong>Ganar confianza</strong> para viajar y explorar</li>
+                <li>🧠 <strong>Ejercitar tu cerebro</strong> de forma divertida</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 10: Reflexión final -->
+        <div class="slide">
+            <h2>💭 Para Llevar Contigo</h2>
+            <div class="personal-story" style="font-size: 1.2rem; margin: 20px 0;">
+                "Los idiomas no son barreras, son puentes. Y el español, italiano e inglés son como tres puentes que se conectan entre sí, permitiéndote cruzar hacia nuevas culturas, nuevas amistades y nuevas aventuras."
+            </div>
+            <p style="font-size: 1.3rem; margin: 20px 0;">No necesitas ser perfecto. Solo necesitas tener curiosidad y ganas de explorar.</p>
+            <div class="fun-fact" style="font-size: 1.2rem;">
+                🌟 <strong>Recuerda:</strong> Cada palabra que aprendes en un idioma, te acerca a entender los otros dos. ¡Es como un superpoder!
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Gracias -->
+        <div class="slide">
+            <h1>🙏 ¡Gracias por Acompañarme!</h1>
+            <div class="flags-container">
+                <div class="flag-item">
+                    <span class="flag-emoji">🇪🇸</span>
+                    <span class="flag-label">¡Hasta pronto!</span>
+                </div>
+                <div class="flag-item">
+                    <span class="flag-emoji">🇮</span>
+                    <span class="flag-label">Arrivederci!</span>
+                </div>
+                <div class="flag-item">
+                    <span class="flag-emoji">🇬🇧</span>
+                    <span class="flag-label">See you soon!</span>
+                </div>
+            </div>
+            <div class="personal-story" style="margin: 30px 0;">
+                "Espero que esta presentación te inspire a explorar estos idiomas y descubrir tus propias conexiones mágicas entre ellos."
+            </div>
+            <p style="margin-top: 20px;">¿Preguntas? ¡Me encantaría escucharte! 💬</p>
+            <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">Creado con ❤️ usando HTML, CSS y JavaScript</p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="prevBtn" onclick="changeSlide(-1)">◀ Anterior</button>
+        <span class="slide-counter" id="slideCounter">1 / 11</span>
+        <button class="btn" id="nextBtn" onclick="changeSlide(1)">Siguiente ▶</button>
+    </div>
+
+    <!-- Mariposa Morpho 3D -->
+    <div class="morpho-wrapper" id="morphoWrapper">
+        <div class="morpho" id="morpho">
+            <div class="wing-wrapper wing-left">
+                <div class="wing-mirror">
+                    <div class="wing-top"></div>
+                    <div class="wing-bottom"></div>
+                </div>
+            </div>
+            <div class="wing-wrapper wing-right">
+                <div class="wing-mirror">
+                    <div class="wing-top"></div>
+                    <div class="wing-bottom"></div>
+                </div>
+            </div>
+            <div class="body-part thorax"></div>
+            <div class="body-part abdomen"></div>
+            <div class="antenna left"></div>
+            <div class="antenna right"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. LÓGICA DE LA PRESENTACIÓN - TRANSICIÓN 1.5 SEGUNDOS
+        // ==========================================
+        let currentSlide = 0;
+        let isTransitioning = false;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideCounter = document.getElementById('slideCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const morphoWrapper = document.getElementById('morphoWrapper');
+
+        function updateControls() {
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            if (isTransitioning) return;
+            
+            const newSlide = currentSlide + direction;
+            if (newSlide < 0 || newSlide >= totalSlides) return;
+
+            isTransitioning = true;
+            const currentSlideEl = slides[currentSlide];
+            const nextSlideEl = slides[newSlide];
+
+            currentSlideEl.classList.add('fade-out');
+
+            setTimeout(() => {
+                currentSlideEl.classList.remove('active', 'fade-out');
+                currentSlideEl.style.display = 'none';
+
+                nextSlideEl.style.display = 'flex';
+                nextSlideEl.style.opacity = '0';
+                nextSlideEl.classList.add('active');
+                
+                morphoWrapper.classList.add('appearing');
+                
+                setTimeout(() => {
+                    morphoWrapper.classList.remove('appearing');
+                    morphoWrapper.classList.add('visible-brief');
+                    
+                    setTimeout(() => {
+                        morphoWrapper.classList.remove('visible-brief');
+                        morphoWrapper.classList.add('fading-dark');
+                        
+                        setTimeout(() => {
+                            nextSlideEl.style.opacity = '';
+                            nextSlideEl.classList.remove('fade-in');
+                            currentSlide = newSlide;
+                            updateControls();
+                        }, 100);
+                        
+                        setTimeout(() => {
+                            morphoWrapper.classList.remove('fading-dark');
+                            isTransitioning = false;
+                        }, 500);
+                    }, 150);
+                }, 500);
+            }, 250);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        updateControls();
+
+        // ==========================================
+        // 2. MARIPOSAS DE FONDO (CANVAS)
+        // ==========================================
+        const canvas = document.getElementById('butterfly-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let butterflies = [];
+        const BUTTERFLY_COUNT = 50; 
+        
+        const colors = [
+            '#1E3A8A', '#1E40AF', '#2563EB', '#3B82F6',
+            '#60A5FA', '#93C5FD', '#BFDBFE', '#00BFFF',
+            '#87CEEB', '#4FC3F7', '#00CED1', '#40E0D0'
+        ];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Butterfly {
+            constructor() {
+                this.reset();
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = height + 10;
+                this.size = Math.random() * 4 + 2;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = -(Math.random() * 1.5 + 0.5);
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.wingPhase = Math.random() * Math.PI * 2;
+                this.wingSpeed = Math.random() * 0.15 + 0.1;
+                this.wobble = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = Math.random() * 0.05 + 0.02;
+            }
+
+            update() {
+                this.x += this.speedX + Math.sin(this.wobble) * 0.5;
+                this.y += this.speedY;
+                this.wingPhase += this.wingSpeed;
+                this.wobble += this.wobbleSpeed;
+
+                if (this.y < -10) this.reset();
+                if (this.x < -10) this.x = width + 10;
+                if (this.x > width + 10) this.x = -10;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                const wingWidth = this.size * Math.abs(Math.sin(this.wingPhase));
+                const wingHeight = this.size * 1.5;
+
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.8;
+
+                ctx.beginPath();
+                ctx.ellipse(-wingWidth/2, -wingHeight/3, wingWidth, wingHeight, -0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.ellipse(wingWidth/2, -wingHeight/3, wingWidth, wingHeight, 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.ellipse(-wingWidth/3, wingHeight/3, wingWidth * 0.7, wingHeight * 0.8, -0.1, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.ellipse(wingWidth/3, wingHeight/3, wingWidth * 0.7, wingHeight * 0.8, 0.1, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size * 0.2, this.size * 1.2, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        function initButterflies() {
+            butterflies = [];
+            for (let i = 0; i < BUTTERFLY_COUNT; i++) {
+                butterflies.push(new Butterfly());
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < butterflies.length; i++) {
+                butterflies[i].update();
+                butterflies[i].draw();
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        initButterflies();
+        animateCanvas();
+
+        // ==========================================
+        // 3. PARTÍCULAS DECORATIVAS DE FONDO
+        // ==========================================
+        for(let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'bg-particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = Math.random() * 100 + 'vh';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(particle);
+        }
+    </script>
+
+</body>
+</html>
